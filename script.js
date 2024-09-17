@@ -40,12 +40,12 @@ let scrambles = [
     [` R' F R U R' U' F' U R `], // 31
     [` f R' F' R U R U' R' S' `], // 32
     [` F R' F' R U R U' R' `], // 33
-    [` F U R' U' R' F' R U R2' U' R'  `], // 34
+    [` F U R' U' R' F' R U R2' U' R' `], // 34
     [` R U2' R' F R' F' R2' U2' R' `], // 35
     [` F' L F L' U' L' U' L U L' U L `], // 36
     [` F R U' R' U R U R' F' `], // 37
     [` F R' F' R U R U R' U' R U' R' `], // 38
-    [` L U F' U' L' U L F L'  `], // 39
+    [` L U F' U' L' U L F L' `], // 39
     [` R' U' F U R U' R' F' R `], // 40
     [` F U R U' R' F' R U2' R' U' R U' R' `], // 41
     [` F U R U' R' F' R' U2' R U R' U R `], // 42
@@ -66,11 +66,73 @@ let scrambles = [
     [` r U R' U' M U R U' R' `] // 57
 ];
 
+
+let caseNames = [
+    [`Dot 1`], // OLL 1
+    [`Dot 2`], // 2
+    [`Dot 3`], // 3
+    [`Dot 4`], // 4
+    [`Square 1`], // 5
+    [`Square 2`], // 6
+    [`Lightning 1`], // 7
+    [`Lightning 2`], // 8
+    [`Fish 1`], // 9
+    [`Fish 2`], // 10
+    [`Lightning 3`], // 11
+    [`Lightning 4`], // 12
+    [`Knight Move 1`], // 13
+    [`Knight Move 2`], // 14
+    [`Knight Move 3`], // 15
+    [`Knight Move 4`], // 16
+    [`Dot 5`], // 17
+    [`Dot 6`], // 18
+    [`Dot 7 `], // 19
+    [`Dot 8`], // 20
+    [`Cross 1 (OCLL 1)`], // 21
+    [`Cross 2 (OCLL 2)`], // 22
+    [`Cross 3 (OCLL 3)`], // 23
+    [`Cross 4 (OCLL 4)`], // 24
+    [`Cross 5 (OCLL 5)`], // 25
+    [`Cross 6 (OCLL 6)`], // 26
+    [`Cross 7 (OCLL 7)`], // 27
+    [`Corner 1`], // 28
+    [`Awkward 1`], // 29
+    [`Awkward 2`], // 30
+    [`P Shape 1`], // 31
+    [`P Shape 2`], // 32
+    [`T Shape 1`], // 33
+    [`C Shape 1`], // 34
+    [`Fish 3`], // 35
+    [`W Shape 1`], // 36
+    [`Fish 4`], // 37
+    [`W Shape 2`], // 38
+    [`Lightning 5`], // 39
+    [`Lightning 6`], // 40
+    [`Awkward 3`], // 41
+    [`Awkward 4`], // 42
+    [`P Shape 3`], // 43
+    [`P Shape 4`], // 44
+    [`T Shape 2`], // 45
+    [`C Shape 2`], // 46
+    [`L Shape 1`], // 47
+    [`L Shape 2`], // 48
+    [`L Shape 3`], // 49
+    [`L Shape 4`], // 50
+    [`Line Shape 1`], // 51
+    [`Line Shape 2`], // 52
+    [`L Shape 5`], // 53
+    [`L Shape 6`], // 54
+    [`Line Shape 3`], // 55
+    [`Line Shape 4`], // 56
+    [`Corner 2`] // 57
+];
+
 let times = new Array(57).fill(null).map(() => []);
 
 
 const timerDisplay = document.getElementById('timer');
 const currentScramble = document.getElementById('scramble');
+const timerResults = document.getElementById('times-box');
 
 //helper functions
 
@@ -92,16 +154,28 @@ function setRandomScramble() {
     // for example, we want the time correlating with OLL 1 to go in the first index of times, or times[0]
 }
 
+function updateTimerResults() {
+    let format = "";
+    for (let i = 0; i < times.length; i++) {
+        if (times[i].length !== 0) {
+            format += `<strong>${caseNames[i]}</strong>: ${times[i]}<br>`;
+        }
+    }
+    timerResults.innerHTML = format;
+}
+
 
 //start of program
 if (document.body.id === 'oll-page') {
     setRandomScramble();
+    updateTimerResults();
 }
 
 function setTimerColor(color){
     timerDisplay.classList.remove('timer-red', 'timer-green', 'timer-black');
     timerDisplay.classList.add(color);
 }
+
 
 document.addEventListener('keydown', function(event) {
     if (event.code === 'Space' && !event.repeat) {
@@ -114,6 +188,7 @@ document.addEventListener('keydown', function(event) {
             setRandomScramble(); // do this after push statement so that the time is added to the correct index (setRandomScramble alters currentOLL)
 
             //console.log(JSON.stringify(times, null, 2)); //testing line
+            updateTimerResults();
 
             clearInterval(timerInterval);
         } else {

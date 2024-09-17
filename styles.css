@@ -28,6 +28,7 @@ main{
     width: 100%;
     text-align:center;
 
+    border-radius: 15px;
     padding:10px;
     word-wrap:break-word;
     font-size: 50px;
@@ -44,15 +45,22 @@ button{
     border: 3px solid rgb(0, 0, 0);
     color: rgb(0, 0, 0);
     background-color: #4291e6;
+    border-radius: 15px;
 }
 #home-button{
     margin-right: auto;
+    border-radius: 15px;
 }
 #times-box {
     background-color: #444c4e;
     width: 17%;
     height: 80vh;
-    text-align:center;
+    text-align: left;
+    padding-left: 1em;
+    padding-top: 1em;
+    overflow-y: auto;
+    border-radius: 15px;
+    font-size: 1.2em;
 
     margin-left: 1em;
     margin-right: 1em;
