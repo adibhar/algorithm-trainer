@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #5c797e;
+    background-color: #555e6e;
     text-align: center;
 }
 header{
@@ -11,7 +11,7 @@ header{
     padding:10px;
     word-wrap:break-word;
 
-    background-color: #88b6be;
+    background-color: #6b79e3;
 }
 main{
     padding: .75em;
@@ -24,7 +24,7 @@ main{
     display: flex;
 }
 #scramble{
-    background-color: #88b6be;
+    background-color: #6b79e3;
     width: 100%;
     text-align:center;
 
@@ -51,8 +51,21 @@ button{
     margin-right: auto;
     border-radius: 15px;
 }
+#prev-time{
+    margin-left: auto;
+    background-color: #3954c0;
+    width: 100%;
+    text-align:center;
+
+    border-radius: 10px;
+    padding:10px;
+    word-wrap:break-word;
+    font-size: 16px;
+    margin-left: 1em;
+    margin-right: 1em;
+}
 #times-box {
-    background-color: #444c4e;
+    background-color: #5965bb;
     width: 17%;
     height: 80vh;
     text-align: left;

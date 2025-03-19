@@ -10,6 +10,7 @@ let formatTime = (0.00).toFixed(2);
 let ollScrambles;
 let ollCaseNames;
 let currentOll;
+let prev;
 
 //PLL data
 let pllScrambles;
@@ -26,10 +27,12 @@ let pllTimes = new Array(21).fill(null).map(() => []);
 const timerDisplay = document.getElementById('timer');
 const currentScramble = document.getElementById('scramble');
 const timerResults = document.getElementById('times-box');
+const prevDisplay = document.getElementById('prev-time');
 
 
 //fetches OLL data from database
 async function fetchSpreadsheetData() {
+    prev = -1;
     if (document.body.id === 'oll-page') {
         const response = await fetch('https://docs.google.com/spreadsheets/d/1owibl9hlbkHKud2QcjV5LQEZvnQx3_oU9hC_ToF7lXY/export?format=csv');
         const data = await response.text();
@@ -44,6 +47,26 @@ async function fetchSpreadsheetData() {
         });
 
         ollCaseNames = rows.map(row => {
+            const cols = row.split(',');
+            const namesRead = cols[1]
+            return namesRead
+
+        });
+    }
+    if (document.body.id === 'pll-page') {
+        const response = await fetch('https://docs.google.com/spreadsheets/d/1owibl9hlbkHKud2QcjV5LQEZvnQx3_oU9hC_ToF7lXY/export?format=csv');
+        const data = await response.text();
+
+        const rows = data.split('\n').slice(58, 80); 
+
+        pllScrambles = rows.map(row => {
+            const cols = row.split(',');
+            const scramblesRead = cols[4].split(';').map(algorithm => algorithm.trim());
+            return scramblesRead
+
+        });
+
+        pllCaseNames = rows.map(row => {
             const cols = row.split(',');
             const namesRead = cols[1]
             return namesRead
@@ -75,18 +98,46 @@ function setRandomScramble() {
 
         // for example, we want the time correlating with OLL 1 to go in the first index of times, or times[0]
     }
+    if (document.body.id === 'pll-page') {
+        currentPll = Math.floor(Math.random() * (21) + 1); 
+        let randomScr = Math.floor(Math.random() * (pllScrambles[currentPll - 1].length));
+
+        //currentScramble.textContent = scrambles[currentOll - 1] + ' ' + currentOllPlusOne; //testing line
+
+        currentScramble.textContent = pllScrambles[currentPll - 1][randomScr];
+    }
 }
 
 function updateTimerResults() {
     let format = "";
+    let formatPrev = "Previous Case: ";
     if (document.body.id === 'oll-page') {
         for (let i = 0; i < ollTimes.length; i++) {
             if (ollTimes[i].length !== 0) {
                 format += `<strong>${ollCaseNames[i]}</strong>: ${ollTimes[i]}<br>`; 
             }
         }
+        if (prev != -1) {
+            formatPrev += ollCaseNames[prev]; 
+        } else {
+            formatPrev += "None"; 
+        }
+        
+    }
+    if (document.body.id === 'pll-page') {
+        for (let i = 0; i < pllTimes.length; i++) {
+            if (pllTimes[i].length !== 0) {
+                format += `<strong>${pllCaseNames[i]}</strong>: ${pllTimes[i]}<br>`; 
+            }
+        }
+        if (prev != -1) {
+            formatPrev += pllCaseNames[prev]; 
+        } else {
+            formatPrev += "None"; 
+        }
     }
     timerResults.innerHTML = format;
+    prevDisplay.innerHTML = formatPrev;
 }
 
 
@@ -115,13 +166,15 @@ document.addEventListener('keydown', function(event) {
         if (timerRunning) {
             timerRunning = false;
             if (document.body.id === 'oll-page') {
+                prev = currentOll - 1;
                 ollTimes[currentOll-1].push(formatTime); //refer to c1 above
                 setRandomScramble(); // do this after push statement so that the time is added to the correct index (setRandomScramble alters currentOLL)
                 updateTimerResults();
                 clearInterval(timerInterval);
             }
             if (document.body.id === 'pll-page') {
-                //pllTimes[currentPll-1].push(formatTime);
+                prev = currentPll - 1;
+                pllTimes[currentPll-1].push(formatTime);
                 setRandomScramble();
                 updateTimerResults();
                 clearInterval(timerInterval);
